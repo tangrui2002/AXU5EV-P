@@ -5,8 +5,8 @@
 ## 一、Linux 工具与 C 进阶（2～3 周）
 
 - [X] 熟悉 Linux 命令行和 Shell 基础
-- [ ] 使用 Git 管理代码，掌握分支、提交和回退
-- [ ] 掌握 GCC、Make、CMake 和交叉编译
+- [X] 使用 Git 管理代码，掌握分支、提交和回退
+- [X] 掌握 GCC、Make、CMake 和交叉编译
 - [ ] 使用 GDB、core dump 和日志定位问题
 - [ ] 复习 C 语言内存管理、函数指针、数据结构和并发
 - [ ] 完成一个 PC 端 TCP/UDP 服务程序

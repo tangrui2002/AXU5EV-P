@@ -1,0 +1,3 @@
+/home/tangrui/material/AXU5EV-P/学习过程记录/一、Linux 工具与 C 进阶/hello-c/build-debug/CMakeFiles/hello.dir
+/home/tangrui/material/AXU5EV-P/学习过程记录/一、Linux 工具与 C 进阶/hello-c/build-debug/CMakeFiles/edit_cache.dir
+/home/tangrui/material/AXU5EV-P/学习过程记录/一、Linux 工具与 C 进阶/hello-c/build-debug/CMakeFiles/rebuild_cache.dir

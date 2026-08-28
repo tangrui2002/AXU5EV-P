@@ -1,0 +1,1 @@
+/usr/bin/aarch64-linux-gnu-gcc CMakeFiles/hello.dir/src/main.c.o -o hello  libmath_utils.a 

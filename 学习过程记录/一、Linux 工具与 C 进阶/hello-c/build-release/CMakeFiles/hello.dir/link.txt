@@ -1,0 +1,1 @@
+/usr/bin/cc -O3 -DNDEBUG CMakeFiles/hello.dir/src/main.c.o CMakeFiles/hello.dir/src/math_utils.c.o -o hello 
