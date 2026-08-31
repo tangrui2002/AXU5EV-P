@@ -1,0 +1,24 @@
+2026-08-31 16:20:51 [INFO] pid=17182 src/main.c:108 log_init() -> Log system initialized (file: ./log/app.log)
+2026-08-31 16:20:51 [INFO] pid=17182 src/main.c:128 main() -> Program started, argc=1
+2026-08-31 16:20:51 [DEBUG] pid=17182 src/main.c:131 main() -> argv[0] = ./hello
+2026-08-31 16:20:51 [INFO] pid=17182 src/main.c:135 main() -> 准备调用 add(5, 3)
+2026-08-31 16:20:51 [INFO] pid=17182 src/main.c:137 main() -> add 返回结果: 8
+2026-08-31 16:20:51 [ERROR] pid=17182 src/main.c:144 main() -> open /nonexist/file failed: No such file or directory (errno=2)
+2026-08-31 16:20:51 [INFO] pid=17182 src/main.c:161 main() -> 程序正常结束
+2026-08-31 16:20:51 [INFO] pid=17182 src/main.c:114 log_close() -> Log system shutting down
+2026-08-31 16:24:35 [INFO] pid=17647 src/main.c:106 log_init() -> Log system initialized (file: ./log/app.log)
+2026-08-31 16:24:35 [INFO] pid=17647 src/main.c:126 main() -> Program started, argc=1
+2026-08-31 16:24:35 [DEBUG] pid=17647 src/main.c:129 main() -> argv[0] = ./hello
+2026-08-31 16:24:35 [INFO] pid=17647 src/main.c:133 main() -> 准备调用 add(5, 3)
+2026-08-31 16:24:35 [INFO] pid=17647 src/main.c:135 main() -> add 返回结果: 8
+2026-08-31 16:24:35 [ERROR] pid=17647 src/main.c:142 main() -> open /nonexist/file failed: No such file or directory (errno=2)
+2026-08-31 16:24:35 [INFO] pid=17647 src/main.c:159 main() -> 程序正常结束
+2026-08-31 16:24:35 [INFO] pid=17647 src/main.c:112 log_close() -> Log system shutting down
+2026-08-31 16:25:21 [INFO] pid=17704 src/main.c:106 log_init() -> Log system initialized (file: ./log/app.log)
+2026-08-31 16:25:21 [INFO] pid=17704 src/main.c:126 main() -> Program started, argc=1
+2026-08-31 16:25:21 [DEBUG] pid=17704 src/main.c:129 main() -> argv[0] = ./hello
+2026-08-31 16:25:21 [INFO] pid=17704 src/main.c:133 main() -> 准备调用 add(5, 3)
+2026-08-31 16:25:21 [INFO] pid=17704 src/main.c:135 main() -> add 返回结果: 8
+2026-08-31 16:25:21 [ERROR] pid=17704 src/main.c:142 main() -> open /nonexist/file failed: No such file or directory (errno=2)
+2026-08-31 16:25:21 [INFO] pid=17704 src/main.c:159 main() -> 程序正常结束
+2026-08-31 16:25:21 [INFO] pid=17704 src/main.c:112 log_close() -> Log system shutting down

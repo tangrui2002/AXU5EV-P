@@ -17,19 +17,25 @@
       -fno-omit-frame-pointer \
       src/main.c src/math_utils.c \
       -o hello
-
+        #若报错找不到头文件，添加-Iinclude指定头文件路径
   参数含义：
 
   - -g：生成 GDB 所需的调试信息
   - -Og：保留较好的调试体验并进行适度优化
   - -O0：几乎不优化，初学时也可以使用
   - -fno-omit-frame-pointer：保留栈帧指针，便于回溯调用栈
-
+        #-fno-omit-frame-pointer：强制保留栈帧指针（FP）。在函数调用时，这个指针用于记录调用链。加上它后，当你用 perf（性能分析工具）或 gdb 发生崩溃时，能够轻松回溯（backtrace）出完整的函数调用栈，而不会丢失关键的调用层级信息。
   检查是否包含调试信息：
 
   file hello
+        #输出结果hello: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=2d6f68291aaeea549783eff464497bd4ee7e2700, for GNU/Linux 3.2.0, with debug_info, not stripped
+        #ELF : Linux 下标准的可执行文件格式; 64位；LSB ： 小端； X86-64架构；
+        #dynamically linked ： 动态链接 ；interpreter /lib64/ld-linux-x86-64.so.2 ： 动态链接器路径；
+        #以及版本标识等等信息
   readelf --debug-dump=info hello | less
-
+        #readelf：Linux 读取和分析 ELF 格式文件工具。
+        # --debug-dump=info ： 简写-wi， 提取 ELF 文件中的 .debug_info 节区，包含了源代码中的类型定义、变量声明、函数原型、编译单元等信息。
+        
   注意：不要使用 strip hello，否则可能删除调试信息。
 
   ## 2. GDB 基础操作（2 小时）
@@ -37,25 +43,41 @@
   启动 GDB：
 
   gdb ./hello
-
+        #启动调试
   常用命令：
-
+    >运行控制
   break main
+        #可简写为 b main，在 main 函数的入口处设置断点。
   run
+        #简写r， 开始运行程序，直到遇到断点或程序崩溃。
   next
+        #简写n, 单步逐过程执行（不会停在函数内部）。
   step
+        #简写s， 单步逐语句执行（会跳进函数内部）。
   continue
+        #简写c， 继续运行
   finish
-
-  print variable
+        #运行完当前函数。
+        
+    >查看数据 
+  print variable（变量）
+        #简写p， 打印一次变量的当前值。
   display variable
+        #持续显示变量值。
   info locals
+        #显示当前函数中所有局部变量的当前值。
   info args
-
+        #显示当前函数接收到的所有实参的值。
+        
+    >故障回溯及代码定义
   backtrace
+        #简写bt， 查看调用栈。显示程序是如何一步步执行到当前这行的（从 main 到当前函数的完整调用链）。程序崩溃时，第一时间执行 bt，能立刻看到是哪个函数、第几行引发的崩溃。
   frame 1
+        #切换栈帧。backtrace 会列出多层调用（编号 0, 1, 2...）。frame 1 会把调试视角切换到第 1 层，让你查看该层函数的变量（默认在崩溃的当前帧 0）。
   list
+        #列出源代码。默认显示当前执行点附近的 10 行代码。可以快速回顾上下文，不用切出去看源文件。
   quit
+        #退出 GDB。如果程序正在运行，GDB 会提示是否终止它
 
   重点区别：
 
@@ -83,12 +105,67 @@
 
   int *p = NULL;
   *p = 123;
-
+        #报错Program received signal SIGSEGV, Segmentation fault.
+        (gdb) bt
+        #0  0x00005555555551a0 in main () at src/main.c:15
+        (gdb) info locals 
+        x = 5
+        y = 3
+        result = 8
+        p = 0x0
+        (gdb) frame 0
+        #0  0x00005555555551a0 in main () at src/main.c:15
+        15	    *p = 123;
+        (gdb) list
+        10	    //int a[3] = {1, 2, 3};
+        11	    //printf("%d\n", a[10]);
+        12	    
+        13	    //空指针测试程序
+        14	    int *p = NULL;
+        15	    *p = 123;
+        16	  
+        17	    return 0;
+        18	}
+        (gdb) print p
+        $1 = (int *) 0x0
+        (gdb) print &p
+        $2 = (int **) 0x7fffffffdb28
+        (gdb) info registers 
+        rax            0x0                 0
+        rbx            0x7fffffffdc58      140737488346200
+        rcx            0x0                 0
+        rdx            0x0                 0
+        rsi            0x5555555592a0      93824992252576
+        rdi            0x7fffffffd930      140737488345392
+        rbp            0x7fffffffdb30      0x7fffffffdb30
+        rsp            0x7fffffffdb10      0x7fffffffdb10
+        r8             0x7ffff7e03b20      140737352055584
+        r9             0x410               1040
+        r10            0x1                 1
+        r11            0x202               514
+        r12            0x1                 1
+        r13            0x0                 0
+        r14            0x555555557dc0      93824992247232
+        r15            0x7ffff7ffd000      140737354125312
+        rip            0x5555555551a0      0x5555555551a0 <main+87>
+        eflags         0x10246             [ PF ZF IF RF ]
+        cs             0x33                51
+        ss             0x2b                43
+        ds             0x0                 0
+        es             0x0                 0
+        fs             0x0                 0
+        --Type <RET> for more, q to quit, c to continue without paging--q
+        Quit
+        (gdb) x/i $pc
+        => 0x5555555551a0 <main+87>:	movl   $0x7b,(%rax)
+        #movl   $0x7b,(%rax)定位到将数据0x7b写入到地址0x0, 导致非法地址写入
+        
+        
   或者：
 
   int a[3] = {1, 2, 3};
   printf("%d\n", a[10]);
-
+        #注：GDB 只能在收到信号或断点暂停时显示现场，并不会自动检查 C 数组边界。
   在 GDB 中运行：
 
   gdb ./crash
@@ -99,8 +176,8 @@
   frame 0
   list
   print p
-  info registers
-  x/i $pc
+  info registers    #显示 CPU 所有通用寄存器的当前值
+  x/i $pc       #以汇编指令的形式，反汇编出程序计数器（PC）当前指向的那条机器码
 
   定位段错误时，重点关注：
 
@@ -113,10 +190,16 @@
   建议顺便学习：
 
   watch variable
+        #在变量被  写入（修改） 时，程序暂停。
   rwatch variable
+        #当指定的变量被  读取  时，程序暂停。
   catch signal SIGSEGV
+        #主动捕获段错误信号SIGSEGV。（实际上，GDB 默认就会捕获所有会终止程序的信号，包括 SIGSEGV）
   disassemble /m function_name
+        #带源码的混合反汇编。x/i $pc 只看当前这一条。disassemble /m main 会把整个 main 函数的汇编全部倒出来。
   x/16gx address
+        #查看从指定地址开始的16 字节，16进制。
+        
 
   ## 4. Core Dump：保存崩溃现场（1.5 小时）
 
@@ -271,10 +354,10 @@
 
   ## 今日验收清单
 
-  - [ ] 能使用 break、run、next、step
-  - [ ] 能用 bt 查看函数调用栈
-  - [ ] 能用 print、info locals 检查变量
-  - [ ] 能定位一次空指针或段错误
+  - [X] 能使用 break、run、next、step
+  - [X] 能用 bt 查看函数调用栈
+  - [X] 能用 print、info locals 检查变量
+  - [X] 能定位一次空指针或段错误
   - [ ] 能配置 ulimit -c unlimited
   - [ ] 能使用 gdb program core 分析 Core 文件
   - [ ] 能解释为什么 Core 必须匹配可执行文件和符号
